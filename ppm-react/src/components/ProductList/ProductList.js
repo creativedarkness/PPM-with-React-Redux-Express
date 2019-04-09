@@ -2,39 +2,54 @@
 // each product will have it's onw box
 // each box will have a title, proce, and description 
 // each box will have am edit and delete button
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { deleteProductRecord, editProduct} from '../../redux';
+import axios from 'axios';
+import { deleteProductRecord, editProduct, updateProductList } from '../../redux';
 import './ProductList.css';
 
-const ProdcutList = (props) => {
-    console.log("productList props", props)
+class ProdcutList extends Component {
 
-    const handleEditClicked = (product, id) => {
+    handleEditClicked = (product, id) => {
         // console.log("editClick param",product);
-        props.editProduct(product, id);
-        props.history.push(`/products/edit/${product.id}`)
+        this.props.editProduct(product, id);
+        this.props.history.push(`/products/edit/${product.id}`)
     }
 
-    return (
-        <div className="productBox">
-            <h1 className="componenetTitle">Product List</h1>
-            {props.products.map((product, index) => {
-                // console.log("product", product);
-                // console.log("product.id", product.id);
-                return (
-                    <div className="productItemBox" key={index}>
-                        <h3>{product.title}</h3>
-                        <h4>${product.price}</h4>
-                        <p>{product.description}</p>
-                        <button className="editButton" namne={product.id} onClick={(event) => {handleEditClicked(product, product.id)}}>Eidt</button>
-                        <br />
-                        <button className="deleteButton" namne={product.id} onClick={() => props.deleteProduct(product.id)}>Delete</button>
-                    </div>
-                )
-            })}
-        </div>
-    )
+    componentDidMount = () => {
+        axios
+            .get(`http://localhost:1337/api/v1/products`)
+            .then((response) => {
+                console.log("getList response:", response);
+                this.props.updateList(response.data)
+            })
+            .catch(error => {
+                console.log("getList Error", error);
+            })
+    }
+
+    render() {
+        console.log("productList props", this.props)
+        return (
+            <div className="productBox">
+                <h1 className="componenetTitle">Product List</h1>
+                {this.props.products.map((product, index) => {
+                    // console.log("product", product);
+                    // console.log("product.id", product.id);
+                    return (
+                        <div className="productItemBox" key={index}>
+                            <h3>{product.title}</h3>
+                            <h4>${product.price}</h4>
+                            <p>{product.description}</p>
+                            <button className="editButton" namne={product.id} onClick={(event) => { this.handleEditClicked(product, product.id) }}>Eidt</button>
+                            <br />
+                            <button className="deleteButton" namne={product.id} onClick={() => this.props.deleteProduct(product.id)}>Delete</button>
+                        </div>
+                    )
+                })}
+            </div>
+        )
+    }
 }
 const mapStateToProps = (state) => ({
     products: state.products
@@ -42,7 +57,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     deleteProduct: (id) => dispatch(deleteProductRecord(id)),
-    editProduct: (id) => dispatch( editProduct(id))
+    editProduct: (id) => dispatch(editProduct(id)),
+    updateList: (products) => dispatch(updateProductList(products))
 })
 
 export default connect(

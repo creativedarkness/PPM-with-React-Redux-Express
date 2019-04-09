@@ -3,6 +3,10 @@
 
 import { createStore } from 'redux';
 
+export const updateProductList = (products) => ({
+    type: 'UPDATE_PRODUCT_LIST',
+    products,
+})
 export const createNew = (product) => ({
     type: 'CREATE_NEW',
     product
@@ -24,6 +28,13 @@ export const deleteProductRecord = (deleteId) => ({
 
 export const reducers = (state = initialState, action) => {
     switch (action.type) {
+
+        case 'UPDATE_PRODUCT_LIST':
+            return {
+                ...state,
+                products: [...action.products]
+            }
+
         case 'CREATE_NEW':
             return {
                 ...state,
@@ -82,10 +93,10 @@ export const reducers = (state = initialState, action) => {
 let id = 4;
 const initialState = {
     products: [
-        { id: 1, title: 'Thing 1', price: 3000, description: 'it really fancy and sh--', },
-        { id: 2, title: 'Thing 2', price: 3000, description: 'it really fancy and sh--', },
-        { id: 3, title: 'Thing 3', price: 3000, description: 'it really fancy and sh--', },
-        { id: 4, title: 'Thing 4', price: 3000, description: 'it really fancy and sh--', },
+        // { id: 1, title: 'Thing 1', price: 3000, description: 'it really fancy and sh--', },
+        // { id: 2, title: 'Thing 2', price: 3000, description: 'it really fancy and sh--', },
+        // { id: 3, title: 'Thing 3', price: 3000, description: 'it really fancy and sh--', },
+        // { id: 4, title: 'Thing 4', price: 3000, description: 'it really fancy and sh--', },
     ],
     editProductRecord: null,
 }

@@ -48,11 +48,12 @@ class EditProdcut extends Component {
 
 
 
+
     render() {
         // console.log("EidtProps", this.props.editProductRecord);
         console.log(this.state);
 
-        const isValidData = this.state.title.length <= 4 && this.state.price !== null;
+        const isValidData = this.state.title.length >= 4 && this.state.price !== null;
 
         return (
             <div className="productBox">
@@ -83,6 +84,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     deleteProduct: (id) => dispatch(deleteProductRecord(id)),
     updateProduct: (product, id) => dispatch(updateProductInfo(product, id))
+
 })
 
 export default connect(
